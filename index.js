@@ -33,6 +33,6 @@ app.use("/api/orders", orderRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/checkout", stripeRoute);
 
-app.listen(8800, () => {
+app.listen(process.env.PORT ||8800, () => {
   console.log("Backend server is ready!");
 });
