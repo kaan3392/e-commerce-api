@@ -34,3 +34,18 @@ guest@example.com (Customer)
 123456
 
 ```
+
+## Use these as fake credit card for try shopping:
+
+do this;
+
+```
+
+
+cart number => 4242 4242 4242 4242
+
+date => 08/24
+
+cvc => 123
+
+```
