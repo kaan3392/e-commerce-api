@@ -23,7 +23,10 @@ mongoose.connect(
 );
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ["https://e-commerce-frontend-three.vercel.app/"],
+  optionsSuccessStatus: 200
+}))
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
