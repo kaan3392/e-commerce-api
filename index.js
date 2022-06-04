@@ -24,7 +24,7 @@ mongoose.connect(
 
 app.use(express.json());
 app.use(cors({
-  origin: ["https://e-commerce-frontend-three.vercel.app/"],
+  origin: "https://e-commerce-frontend-three.vercel.app/",
   optionsSuccessStatus: 200
 }))
 
