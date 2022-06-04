@@ -13,10 +13,9 @@ router.post("/", verifyToken, async (req, res) => {
   const newOrder = new Order(req.body);
   try {
     const savedOrder = await newOrder.save();
-    res.status(200).json(savedOrder);
+   return res.status(200).json(savedOrder);
   } catch (err) {
-    res.status(500).json(err);
-    console.log(err);
+   return res.status(500).json(err);
   }
 });
 
@@ -31,9 +30,9 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).json(updatedOrder);
+   return res.status(200).json(updatedOrder);
   } catch (err) {
-    res.status(500).json(err);
+   return res.status(500).json(err);
   }
 });
 
@@ -42,9 +41,9 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
 router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     await Order.findByIdAndDelete(req.params.id);
-    res.status(200).json("Order has been deleted");
+   return res.status(200).json("Order has been deleted");
   } catch (err) {
-    res.status(500).json(err);
+   return res.status(500).json(err);
   }
 });
 
@@ -55,9 +54,9 @@ router.get("/find/:id", verifyTokenAndAuthorization, async (req, res) => {
     const order = await Order.find({ userId: req.params.id })
       .sort({ createdAt: -1 })
       .populate("userId").populate("orderItems.product");
-    res.status(200).json(order);
+   return res.status(200).json(order);
   } catch (err) {
-    res.status(500).json(err);
+   return res.status(500).json(err);
   }
 });
 
@@ -77,9 +76,9 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
         .populate("userId")
         .populate("orderItems.product");
     }
-    res.status(200).json(orders);
+   return res.status(200).json(orders);
   } catch (err) {
-    res.status(500).json(err);
+   return res.status(500).json(err);
   }
 });
 
@@ -131,9 +130,9 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
         },
       ]);
     }
-    res.status(200).json(income);
+   return res.status(200).json(income);
   } catch (err) {
-    res.status(500).json(err);
+   return res.status(500).json(err);
   }
 });
 
@@ -167,10 +166,9 @@ router.get("/income/:id", verifyTokenAndAdmin, async (req, res) => {
         },
       },
     ]);
-    res.status(200).json(income);
+   return res.status(200).json(income);
   } catch (err) {
-    res.status(500).json(err);
-    console.log(err);
+   return res.status(500).json(err);
   }
 });
 
