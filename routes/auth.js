@@ -1,62 +1,17 @@
 const router = require("express").Router();
-const User = require("../models/User");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const { register, login, logout, editDetails, forgotPassword, resetPassword } = require("../controllers/auth");
+const { getAccessToRoute } = require("../middlewares/authorization/auth");
 
-//register
-router.post("/register", async (req, res) => {
-  try {
-    //generate new password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+router.post("/register", register);
 
-    //create new user
-    const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: hashedPassword,
-    });
-    const uniqueEmail = await User.findOne({ email: req.body.email });
-    if (uniqueEmail) {
-      return res.status(401).json("Email Already Registered");
-    }
-    //save user n send message
-    const user = await newUser.save();
-   return res.status(200).json(user);
-  } catch (err) {
-   return res.status(500).json(err);
-  }
-});
+router.post("/login", login);
 
-//login
-router.post("/login", async (req, res) => {
-  try {
-    //find the user
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) {
-      return res.status(404).json("Wrong credentials!");
-    }
+router.get("/logout",getAccessToRoute, logout);
 
-    //compare the passwords
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    if (!validPassword) {
-      return res.status(400).json("Wrong credentials!");
-    }
+router.put("/edit",getAccessToRoute, editDetails)
 
-    //give access token
-    const accessToken = jwt.sign(
-      { id: user._id, isAdmin: user.isAdmin },
-      process.env.SEC_KEY,
-      { expiresIn: "14d" }
-    );
-    const { password, ...others } = user._doc;
-    return res.status(200).json({ ...others, accessToken });
-  } catch (err) {
-    return res.status(500).json(err);
-  }
-});
+router.post("/forgotpassword", forgotPassword);
+
+router.put("/resetpassword", resetPassword)
 
 module.exports = router;
