@@ -1,5 +1,10 @@
 const router = require("express").Router();
 const {
+  getAccessToRoute,
+  getAdminAccess,
+  getOwnerAccess,
+} = require("../middlewares/authorization/auth");
+const {
   createOrder,
   updateOrder,
   deleteOrder,
@@ -8,11 +13,7 @@ const {
   getIncome,
   getIncomeOfOneProduct,
 } = require("../controllers/order");
-const {
-  getAccessToRoute,
-  getAdminAccess,
-  getOwnerAccess,
-} = require("../middlewares/authorization/auth");
+
 
 router.get("/", getAccessToRoute, getAdminAccess, getOneOrAllOrders);
 

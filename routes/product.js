@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { getAdminAccess, getAccessToRoute } = require("../middlewares/authorization/auth");
 const {
   createProduct,
   updateProduct,
@@ -6,7 +7,6 @@ const {
   getProduct,
   getAllProducts,
 } = require("../controllers/product");
-const { getAdminAccess, getAccessToRoute } = require("../middlewares/authorization/auth");
 
 router.post("/", getAccessToRoute, getAdminAccess, createProduct);
 

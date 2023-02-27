@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const { register, login, logout, editDetails, forgotPassword, resetPassword } = require("../controllers/auth");
 const { getAccessToRoute } = require("../middlewares/authorization/auth");
+const { register, login, logout, editDetails, forgotPassword, resetPassword } = require("../controllers/auth");
 
 router.post("/register", register);
 

@@ -1,10 +1,10 @@
-const CustomError = require("../../helpers/error/CustomError");
-const jwt = require("jsonwebtoken");
 const {
   isTokenIncluded,
   getAccessTokenFromHeader,
 } = require("../../helpers/authorization/tokenhelpers");
 const asyncErrorWrapper = require("express-async-handler");
+const CustomError = require("../../helpers/error/CustomError");
+const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 const Comment = require("../../models/Comment");
 
@@ -59,9 +59,8 @@ const getCommentOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
 
   const comment = await Comment.findById(id);
 
-  if(!comment){
+  if (!comment) {
     return next(new CustomError("There is no comment with that id", 404));
-
   }
 
   if (comment.senderId.toString() !== userId) {
