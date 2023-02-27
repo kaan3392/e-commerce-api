@@ -1,11 +1,11 @@
 const User = require("../models/User");
 const asyncErrorWrapper = require("express-async-handler");
+const { sendJwtToClient } = require("../helpers/authorization/tokenHelpers");
 const CustomError = require("../helpers/error/CustomError");
 const {
   validateUserInput,
   comparePassword,
 } = require("../helpers/input/inputHelpers");
-const { sendJwtToClient } = require("../helpers/authorization/tokenhelpers");
 const sendEmail = require("../helpers/libs/sendEmail");
 
 const register = asyncErrorWrapper(async (req, res, next) => {

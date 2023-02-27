@@ -24,10 +24,8 @@ const sendComment = asyncErrorWrapper(async (req, res) => {
 const deleteComment = asyncErrorWrapper(async (req, res) => {
   const { id } = req.params;
 
-  console.log("*********id********",id)
   const comment = await Comment.findById(id);
 
-  console.log("*****comment********",comment)
 
   await Product.updateOne(
     { _id: req.body.productId },
