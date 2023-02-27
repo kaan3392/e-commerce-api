@@ -1,7 +1,7 @@
 import {
   isTokenIncluded,
   getAccessTokenFromHeader,
-} from "../../helpers/authorization/tokenhelpers.js";
+} from "../../helpers/authorization/tokenHelpers.js";
 import asyncErrorWrapper from "express-async-handler";
 import CustomError from "../../helpers/error/CustomError.js";
 import jwt from "jsonwebtoken";
