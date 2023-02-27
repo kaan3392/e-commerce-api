@@ -1,16 +1,6 @@
 const User = require("../models/User");
 const asyncErrorWrapper = require("express-async-handler");
-
-const getSingleUser = asyncErrorWrapper(async (req, res, next) => {
-  const { id } = req.params;
-
-  const user = await User.findById(id);
-
-  return res.status(200).json({
-    success: true,
-    data: user,
-  });
-});
+const CustomError = require("../helpers/error/CustomError");
 
 const getAllUsers = asyncErrorWrapper(async (req, res) => {
   const query = req.query.new;
@@ -18,14 +8,22 @@ const getAllUsers = asyncErrorWrapper(async (req, res) => {
   const users = query
     ? await User.find().sort({ _id: -1 }).limit(5)
     : await User.find();
-  return res.status(200).json({success:true, data:users});
+    
+  return res.status(200).json({ success: true, data: users });
 });
 
-const deleteUser = asyncErrorWrapper(async (req, res) => {
-  await User.findOneAndDelete(req.params.id);
+const getSingleUser = asyncErrorWrapper(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    return next(new CustomError("There is no user with that id", 404));
+  }
+
   return res.status(200).json({
     success: true,
-    message: "User has been deleted",
+    data: user,
   });
 });
 
@@ -46,8 +44,25 @@ const userStats = asyncErrorWrapper(async (req, res, next) => {
       },
     },
   ]);
+  
+  return res.status(200).json({ success: true, data: data });
+});
 
-  return res.status(200).json({success:true, data:data});
+const deleteUser = asyncErrorWrapper(async (req, res, next) => {
+  const id = req.params.id;
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    return next(new CustomError("There is no user with that id", 404));
+  }
+
+  await user.remove();
+
+  return res.status(200).json({
+    success: true,
+    message: "User has been deleted",
+  });
 });
 
 module.exports = { getSingleUser, getAllUsers, deleteUser, userStats };

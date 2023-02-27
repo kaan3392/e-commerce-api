@@ -14,9 +14,9 @@ const sendJwtToClient = (user, response, status) => {
       success: true,
       access_token: token,
       data: {
-        name: user.name,
+        username: user.username,
         email: user.email,
-        role: user.role,
+        isAdmin: user.isAdmin,
       },
     });
 };

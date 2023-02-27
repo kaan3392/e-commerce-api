@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 const asyncErrorWrapper = require("express-async-handler");
+const CustomError = require("../helpers/error/CustomError");
 
 const createProduct = asyncErrorWrapper(async (req, res, next) => {
   const newProduct = new Product(req.body);
@@ -13,13 +14,21 @@ const updateProduct = asyncErrorWrapper(async (req, res, next) => {
     {
       $set: req.body,
     },
-    { new: true }
+    { new: true, runValidators:true }
   );
   return res.status(200).json({ success: true, data: updateProduct });
 });
 
 const deleteProduct = asyncErrorWrapper(async (req, res, next) => {
-  await Product.findByIdAndDelete(req.params.id);
+  const { id } = req.params;
+  const product = await Product.findById(id);
+
+  if (!product) {
+    return next(new CustomError("There is no product wit that id", 404));
+  }
+
+  await product.remove();
+
   return res
     .status(200)
     .json({ success: true, message: "Product has been deleted" });
@@ -50,7 +59,7 @@ const getAllProducts = asyncErrorWrapper(async (req, res) => {
   } else {
     products = await Product.find();
   }
-  return res.status(200).json({success:true, data:products});
+  return res.status(200).json({ success: true, data: products });
 });
 
 module.exports = {

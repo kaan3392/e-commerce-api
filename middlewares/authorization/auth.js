@@ -33,7 +33,7 @@ const getAdminAccess = asyncErrorWrapper(async (req, res, next) => {
 
   const user = await User.findById(id);
 
-  if (user.isAdmin) {
+  if (!user.isAdmin) {
     return next(new CustomError("Only admins can access this route", 403));
   }
   next();

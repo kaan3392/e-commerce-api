@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const User = require("../models/User");
+
 const {
   deleteUser,
   getAllUsers,
@@ -12,12 +12,14 @@ const {
   getOwnerAccess,
 } = require("../middlewares/authorization/auth");
 
-router.delete("/:id", getAdminAccess, deleteUser);
+router.use([getAccessToRoute, getAdminAccess]);
 
-router.get("/", getAdminAccess, getAllUsers);
+router.get("/", getAllUsers);
 
-router.get("/stats", getAdminAccess, userStats);
+router.get("/:id", getSingleUser);
 
-router.get("/:id", getAdminAccess, getSingleUser);
+router.get("/stats", userStats);
+
+router.delete("/:id", deleteUser);
 
 module.exports = router;

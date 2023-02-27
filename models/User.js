@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Please provide a email"],
       max: 40,
       unique: true,
       lowercase: true,
@@ -28,7 +28,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       minlength: [6, "Please provide a password minimum length 6"],
       required: [true, "Please provide a password"],
-      select: false,
+      select: true,
     },
     isAdmin: {
       type: Boolean,
@@ -65,15 +65,13 @@ UserSchema.methods.generateJwtFromUser = function () {
 UserSchema.methods.getResetPasswordTokenFromUser = function () {
   const randomHexString = crypto.randomBytes(15).toString("hex");
   const { RESET_PASSWORD_EXPIRE } = process.env;
-
   const resetPasswordToken = crypto
     .createHash("SHA256")
     .update(randomHexString)
     .digest("hex");
-
   this.resetPasswordToken = resetPasswordToken;
   this.resetPasswordExpire = Date.now() + parseInt(RESET_PASSWORD_EXPIRE);
-
+  console.log("****this****",this)
   return resetPasswordToken;
 };
 

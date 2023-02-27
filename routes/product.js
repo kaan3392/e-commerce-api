@@ -6,13 +6,13 @@ const {
   getProduct,
   getAllProducts,
 } = require("../controllers/product");
-const { getAdminAccess } = require("../middlewares/authorization/auth");
+const { getAdminAccess, getAccessToRoute } = require("../middlewares/authorization/auth");
 
-router.post("/", getAdminAccess, createProduct);
+router.post("/", getAccessToRoute, getAdminAccess, createProduct);
 
-router.put("/:id", getAdminAccess, updateProduct);
+router.put("/:id", getAccessToRoute, getAdminAccess, updateProduct);
 
-router.delete("/:id", getAdminAccess, deleteProduct);
+router.delete("/:id", getAccessToRoute, getAdminAccess, deleteProduct);
 
 router.get("/:id", getProduct);
 

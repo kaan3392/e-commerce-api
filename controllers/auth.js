@@ -6,15 +6,16 @@ const {
   comparePassword,
 } = require("../helpers/input/inputHelpers");
 const { sendJwtToClient } = require("../helpers/authorization/tokenhelpers");
+const sendEmail = require("../helpers/libs/sendEmail");
 
 const register = asyncErrorWrapper(async (req, res, next) => {
-  const { name, email, password, role } = req.body;
+  const { username, email, password, isAdmin } = req.body;
 
   const user = await User.create({
-    name,
+    username,
     email,
     password,
-    role,
+    isAdmin,
   });
 
   sendJwtToClient(user, res, 200);
@@ -28,6 +29,10 @@ const login = asyncErrorWrapper(async (req, res, next) => {
   }
 
   const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return next(new CustomError("Please check your credentials", 400));
+  }
 
   if (!comparePassword(password, user.password)) {
     return next(new CustomError("Please check your credentials", 400));
@@ -55,10 +60,22 @@ const logout = asyncErrorWrapper(async (req, res, next) => {
 const editDetails = asyncErrorWrapper(async (req, res, next) => {
   const editInformation = req.body;
 
-  const user = await User.findByIdAndUpdate(req.user.id, editInformation, {
-    new: true,
-    runValidators: true,
-  });
+  const { password, ...others } = editInformation;
+
+  let user;
+  if (editInformation.password) {
+    user = await User.findOne({ _id: req.user.id });
+
+    user.password = editInformation.password;
+
+    await user.save();
+  }
+  if (others) {
+    user = await User.findByIdAndUpdate(req.user.id, others, {
+      new: true,
+      runValidators: true,
+    });
+  }
 
   return res.status(200).json({
     success: true,
@@ -85,7 +102,7 @@ const forgotPassword = asyncErrorWrapper(async (req, res, next) => {
   <h3>Reset Your Password</h3>
   <p>This <a href=${resetPasswordUrl} target="_blank"> link </a> will expire in 1 hour.</p>
   `;
-  
+
   try {
     await sendEmail({
       from: process.env.SMTP_USER,
@@ -93,6 +110,7 @@ const forgotPassword = asyncErrorWrapper(async (req, res, next) => {
       subject: "Reset your password",
       html: emailTemplate,
     });
+
     return res.status(200).json({
       success: true,
       message: "Token sent to your email address",
@@ -135,4 +153,11 @@ const resetPassword = asyncErrorWrapper(async (req, res, next) => {
   });
 });
 
-module.exports = { register, login, logout, editDetails, resetPassword, forgotPassword };
+module.exports = {
+  register,
+  login,
+  logout,
+  editDetails,
+  resetPassword,
+  forgotPassword,
+};
