@@ -28,6 +28,7 @@ const getSingleUser = asyncErrorWrapper(async (req, res, next) => {
 });
 
 const userStats = asyncErrorWrapper(async (req, res, next) => {
+  
   const date = new Date();
   const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
   const data = await User.aggregate([

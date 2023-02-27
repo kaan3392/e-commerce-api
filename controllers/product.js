@@ -35,7 +35,14 @@ const deleteProduct = asyncErrorWrapper(async (req, res, next) => {
 });
 
 const getProduct = asyncErrorWrapper(async (req, res) => {
-  const product = await Product.findById(req.params.id).populate("comments");
+  const product = await Product.findById(req.params.id).populate({
+    path: 'comments',
+    populate: {
+        path: 'senderId',
+        select:"username",
+        
+    }
+});
   return res.status(200).json({ success: true, data: product });
 });
 
@@ -57,7 +64,7 @@ const getAllProducts = asyncErrorWrapper(async (req, res) => {
   } else if (filter) {
     products = await Product.find({ title: new RegExp(filter, "i") }).limit(5);
   } else {
-    products = await Product.find();
+    products = await Product.find().populate("comments");
   }
   return res.status(200).json({ success: true, data: products });
 });

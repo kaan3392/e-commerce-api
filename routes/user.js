@@ -8,17 +8,19 @@ const {
 } = require("../controllers/user");
 const {
   getAccessToRoute,
-  getAdminAccess,
-  getOwnerAccess,
+  getAdminAccess
 } = require("../middlewares/authorization/auth");
 
 router.use([getAccessToRoute, getAdminAccess]);
 
+
 router.get("/", getAllUsers);
+
+router.get("/stats", userStats);
+
 
 router.get("/:id", getSingleUser);
 
-router.get("/stats", userStats);
 
 router.delete("/:id", deleteUser);
 

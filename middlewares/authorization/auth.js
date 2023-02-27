@@ -6,6 +6,7 @@ const {
 } = require("../../helpers/authorization/tokenhelpers");
 const asyncErrorWrapper = require("express-async-handler");
 const User = require("../../models/User");
+const Comment = require("../../models/Comment");
 
 const getAccessToRoute = (req, res, next) => {
   if (!isTokenIncluded(req)) {
@@ -54,11 +55,16 @@ const getOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
 
 const getCommentOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
   const userId = req.user.id;
-  const commentId = req.params.answer_id;
+  const { id } = req.params;
 
-  const comment = await Comment.findById(commentId);
+  const comment = await Comment.findById(id);
 
-  if (comment.sender.toString() !== userId) {
+  if(!comment){
+    return next(new CustomError("There is no comment with that id", 404));
+
+  }
+
+  if (comment.senderId.toString() !== userId) {
     return next(new CustomError("Only owner can access this route", 403));
   }
 
@@ -69,5 +75,5 @@ module.exports = {
   getAccessToRoute,
   getAdminAccess,
   getOwnerAccess,
-  getCommentOwnerAccess
+  getCommentOwnerAccess,
 };

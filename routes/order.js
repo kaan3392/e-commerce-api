@@ -14,18 +14,26 @@ const {
   getOwnerAccess,
 } = require("../middlewares/authorization/auth");
 
+router.get("/", getAccessToRoute, getAdminAccess, getOneOrAllOrders);
+
 router.post("/", getAccessToRoute, createOrder);
 
-router.put("/:id", getAdminAccess, updateOrder);
-
-router.delete("/:id", getAdminAccess, deleteOrder);
+router.get("/income", getAccessToRoute, getAdminAccess, getIncome);
 
 router.get("/find/:id", [getAccessToRoute, getOwnerAccess], getUserOrder);
 
-router.get("/", getAdminAccess, getOneOrAllOrders);
+router.put("/:id", getAccessToRoute, getAdminAccess, updateOrder);
 
-router.get("/income", getAdminAccess, getIncome);
+router.delete("/:id", getAccessToRoute, getAdminAccess, deleteOrder);
 
-router.get("/income/:id", getAdminAccess, getIncomeOfOneProduct);
+
+
+
+router.get(
+  "/income/:id",
+  getAccessToRoute,
+  getAdminAccess,
+  getIncomeOfOneProduct
+);
 
 module.exports = router;

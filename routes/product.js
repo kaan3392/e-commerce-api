@@ -10,12 +10,13 @@ const { getAdminAccess, getAccessToRoute } = require("../middlewares/authorizati
 
 router.post("/", getAccessToRoute, getAdminAccess, createProduct);
 
+router.get("/", getAllProducts);
+
 router.put("/:id", getAccessToRoute, getAdminAccess, updateProduct);
 
 router.delete("/:id", getAccessToRoute, getAdminAccess, deleteProduct);
 
 router.get("/:id", getProduct);
 
-router.get("/", getAllProducts);
 
 module.exports = router;

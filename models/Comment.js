@@ -2,22 +2,14 @@ const mongoose = require("mongoose");
 
 const CommentSchema = new mongoose.Schema(
   {
-    productId: {
+    senderId: {
       type: mongoose.Types.ObjectId,
-      ref: "Product",
+      ref: "User",
     },
-    sender: {
-      type: String,
-    },
-    title: {
-      type: String,
-    },
-    desc: {
-      type: String,
-    },
-    review: {
-      type: Number,
-    },
+    productId: String,
+    title: String,
+    desc: String,
+    review: Number,
   },
   { timestamps: true }
 );

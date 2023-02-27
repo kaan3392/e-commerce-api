@@ -3,7 +3,13 @@ const Product = require("../models/Product");
 const asyncErrorWrapper = require("express-async-handler");
 
 const sendComment = asyncErrorWrapper(async (req, res) => {
-  const comment = new Comment(req.body);
+
+  const Info = {
+    senderId: req.user.id,
+    ...req.body
+  }
+  
+  const comment = new Comment(Info);
 
   const saved = await comment.save();
   await Product.updateOne(
@@ -17,7 +23,11 @@ const sendComment = asyncErrorWrapper(async (req, res) => {
 
 const deleteComment = asyncErrorWrapper(async (req, res) => {
   const { id } = req.params;
+
+  console.log("*********id********",id)
   const comment = await Comment.findById(id);
+
+  console.log("*****comment********",comment)
 
   await Product.updateOne(
     { _id: req.body.productId },
