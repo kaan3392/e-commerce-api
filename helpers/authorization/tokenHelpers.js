@@ -8,7 +8,7 @@ export const sendJwtToClient = (user, response, status) => {
     .cookie("access_token", token, {
       httpOnly: true,
       expires: new Date(Date.now() + parseInt(JWT_COOKIE) * 1000 * 60),
-      secure: NODE_ENV === "development" ? false : true,
+      secure: false
     })
     .json({
       success: true,
@@ -32,4 +32,3 @@ export const getAccessTokenFromHeader = (req) => {
   const access_token = authorization.split(" ")[1];
   return access_token;
 };
-
