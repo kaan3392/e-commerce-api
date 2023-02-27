@@ -1,10 +1,10 @@
-const router = require("express").Router();
-const {
+import express from "express";
+import {
   getAccessToRoute,
   getAdminAccess,
   getOwnerAccess,
-} = require("../middlewares/authorization/auth");
-const {
+} from "../middlewares/authorization/auth.js";
+import {
   createOrder,
   updateOrder,
   deleteOrder,
@@ -12,8 +12,9 @@ const {
   getOneOrAllOrders,
   getIncome,
   getIncomeOfOneProduct,
-} = require("../controllers/order");
+} from "../controllers/order.js";
 
+const router = express.Router();
 
 router.get("/", getAccessToRoute, getAdminAccess, getOneOrAllOrders);
 
@@ -37,4 +38,4 @@ router.get(
   getIncomeOfOneProduct
 );
 
-module.exports = router;
+export default router;

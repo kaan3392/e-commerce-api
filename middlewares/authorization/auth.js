@@ -1,14 +1,14 @@
-const {
+import {
   isTokenIncluded,
   getAccessTokenFromHeader,
-} = require("../../helpers/authorization/tokenhelpers");
-const asyncErrorWrapper = require("express-async-handler");
-const CustomError = require("../../helpers/error/CustomError");
-const jwt = require("jsonwebtoken");
-const User = require("../../models/User");
-const Comment = require("../../models/Comment");
+} from "../../helpers/authorization/tokenhelpers.js";
+import asyncErrorWrapper from "express-async-handler";
+import CustomError from "../../helpers/error/CustomError.js";
+import jwt from "jsonwebtoken";
+import User from "../../models/User.js";
+import Comment from "../../models/Comment.js";
 
-const getAccessToRoute = (req, res, next) => {
+export const getAccessToRoute = (req, res, next) => {
   if (!isTokenIncluded(req)) {
     return next(new CustomError("You re not authorization to this route", 401));
   }
@@ -29,7 +29,7 @@ const getAccessToRoute = (req, res, next) => {
   });
 };
 
-const getAdminAccess = asyncErrorWrapper(async (req, res, next) => {
+export const getAdminAccess = asyncErrorWrapper(async (req, res, next) => {
   const { id } = req.user;
 
   const user = await User.findById(id);
@@ -40,7 +40,7 @@ const getAdminAccess = asyncErrorWrapper(async (req, res, next) => {
   next();
 });
 
-const getOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
+export const getOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
   const userId = req.user.id;
   const paramsId = req.params.id;
 
@@ -53,7 +53,7 @@ const getOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
   next();
 });
 
-const getCommentOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
+export const getCommentOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
   const userId = req.user.id;
   const { id } = req.params;
 
@@ -70,9 +70,4 @@ const getCommentOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
   next();
 });
 
-module.exports = {
-  getAccessToRoute,
-  getAdminAccess,
-  getOwnerAccess,
-  getCommentOwnerAccess,
-};
+

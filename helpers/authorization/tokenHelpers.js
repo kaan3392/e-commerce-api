@@ -1,4 +1,4 @@
-const sendJwtToClient = (user, response, status) => {
+export const sendJwtToClient = (user, response, status) => {
   const token = user.generateJwtFromUser();
 
   const { JWT_COOKIE, NODE_ENV } = process.env;
@@ -21,16 +21,15 @@ const sendJwtToClient = (user, response, status) => {
     });
 };
 
-const isTokenIncluded = (req) => {
+export const isTokenIncluded = (req) => {
   return (
     req.headers.authorization && req.headers.authorization.startsWith("Bearer:")
   );
 };
 
-const getAccessTokenFromHeader = (req) => {
+export const getAccessTokenFromHeader = (req) => {
   const authorization = req.headers.authorization;
   const access_token = authorization.split(" ")[1];
   return access_token;
 };
 
-module.exports = { sendJwtToClient, isTokenIncluded, getAccessTokenFromHeader };

@@ -1,14 +1,14 @@
-const Product = require("../models/Product");
-const asyncErrorWrapper = require("express-async-handler");
-const CustomError = require("../helpers/error/CustomError");
+import Product from "../models/Product.js";
+import asyncErrorWrapper from "express-async-handler";
+import CustomError from "../helpers/error/CustomError.js";
 
-const createProduct = asyncErrorWrapper(async (req, res, next) => {
+export const createProduct = asyncErrorWrapper(async (req, res, next) => {
   const newProduct = new Product(req.body);
   const savedPro = await newProduct.save();
   return res.status(200).json({ success: true, data: savedPro });
 });
 
-const updateProduct = asyncErrorWrapper(async (req, res, next) => {
+export const updateProduct = asyncErrorWrapper(async (req, res, next) => {
   const updateProduct = await Product.findByIdAndUpdate(
     req.params.id,
     {
@@ -19,7 +19,7 @@ const updateProduct = asyncErrorWrapper(async (req, res, next) => {
   return res.status(200).json({ success: true, data: updateProduct });
 });
 
-const deleteProduct = asyncErrorWrapper(async (req, res, next) => {
+export const deleteProduct = asyncErrorWrapper(async (req, res, next) => {
   const { id } = req.params;
   const product = await Product.findById(id);
 
@@ -34,7 +34,7 @@ const deleteProduct = asyncErrorWrapper(async (req, res, next) => {
     .json({ success: true, message: "Product has been deleted" });
 });
 
-const getProduct = asyncErrorWrapper(async (req, res) => {
+export const getProduct = asyncErrorWrapper(async (req, res) => {
   const product = await Product.findById(req.params.id).populate({
     path: 'comments',
     populate: {
@@ -46,7 +46,7 @@ const getProduct = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json({ success: true, data: product });
 });
 
-const getAllProducts = asyncErrorWrapper(async (req, res) => {
+export const getAllProducts = asyncErrorWrapper(async (req, res) => {
   const { newPro, category, filter } = req.query;
 
   let products;
@@ -69,10 +69,3 @@ const getAllProducts = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json({ success: true, data: products });
 });
 
-module.exports = {
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  getProduct,
-  getAllProducts,
-};

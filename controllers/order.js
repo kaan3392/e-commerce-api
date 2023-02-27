@@ -1,15 +1,17 @@
-const Order = require("../models/Order");
-const asyncErrorWrapper = require("express-async-handler");
-const ObjectId = require("mongoose").Types.ObjectId;
+import Order from "../models/Order.js";
+import asyncErrorWrapper from "express-async-handler";
+import mongoose from "mongoose";
 
-const createOrder = asyncErrorWrapper(async (req, res, next) => {
+const {ObjectId} = mongoose.Types;
+
+export const createOrder = asyncErrorWrapper(async (req, res, next) => {
   const newOrder = new Order(req.body);
 
   const savedOrder = await newOrder.save();
   return res.status(200).json({success:true, data:savedOrder});
 });
 
-const updateOrder = asyncErrorWrapper(async (req, res) => {
+export const updateOrder = asyncErrorWrapper(async (req, res) => {
   const updatedOrder = await Order.findByIdAndUpdate(
     req.params.id,
     {
@@ -20,12 +22,12 @@ const updateOrder = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json({success:true, data:updatedOrder});
 });
 
-const deleteOrder = asyncErrorWrapper(async (req, res) => {
+export const deleteOrder = asyncErrorWrapper(async (req, res) => {
   await Order.findByIdAndDelete(req.params.id);
   return res.status(200).json({success:true, message:"Order has been deleted!"});
 });
 
-const getUserOrder = asyncErrorWrapper(async (req, res) => {
+export const getUserOrder = asyncErrorWrapper(async (req, res) => {
   const order = await Order.find({ userId: req.params.id })
     .sort({ createdAt: -1 })
     .populate("userId")
@@ -33,7 +35,7 @@ const getUserOrder = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json({success:true, data:order});
 });
 
-const getOneOrAllOrders = asyncErrorWrapper(async (req, res) => {
+export const getOneOrAllOrders = asyncErrorWrapper(async (req, res) => {
   const { id } = req.query;
 
   let orders;
@@ -50,7 +52,7 @@ const getOneOrAllOrders = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json({success:true, data:orders});
 });
 
-const getIncome = asyncErrorWrapper(async (req, res) => {
+export const getIncome = asyncErrorWrapper(async (req, res) => {
   const { compare } = req.query;
   const date = new Date();
   const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
@@ -98,7 +100,7 @@ const getIncome = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json({success:true, data:income});
 });
 
-const getIncomeOfOneProduct = asyncErrorWrapper(async (req, res) => {
+export const getIncomeOfOneProduct = asyncErrorWrapper(async (req, res) => {
   const productId = req.params.id;
   const date = new Date();
   const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
@@ -129,12 +131,3 @@ const getIncomeOfOneProduct = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json({success:true, data:income});
 });
 
-module.exports = {
-  createOrder,
-  updateOrder,
-  deleteOrder,
-  getUserOrder,
-  getOneOrAllOrders,
-  getIncome,
-  getIncomeOfOneProduct,
-};

@@ -1,10 +1,11 @@
-const router = require("express").Router();
-const { getAccessToRoute, getCommentOwnerAccess } = require("../middlewares/authorization/auth");
-const {sendComment,deleteComment} = require("../controllers/comment")
+import express from "express";
+import { getAccessToRoute, getCommentOwnerAccess } from "../middlewares/authorization/auth.js";
+import {sendComment,deleteComment} from "../controllers/comment.js"
 
+const router = express.Router();
 
 router.post("/", getAccessToRoute, sendComment);
 
 router.delete("/:id", getAccessToRoute, getCommentOwnerAccess, deleteComment);
 
-module.exports = router;
+export default router;

@@ -1,14 +1,16 @@
-const router = require("express").Router();
-const {
+import express from "express";
+import {
   getAccessToRoute,
   getAdminAccess,
-} = require("../middlewares/authorization/auth");
-const {
+} from "../middlewares/authorization/auth.js";
+import {
   deleteUser,
   getAllUsers,
   userStats,
   getSingleUser,
-} = require("../controllers/user");
+} from "../controllers/user.js";
+
+const router = express.Router();
 
 router.use([getAccessToRoute, getAdminAccess]);
 
@@ -20,4 +22,4 @@ router.get("/:id", getSingleUser);
 
 router.delete("/:id", deleteUser);
 
-module.exports = router;
+export default router;

@@ -1,14 +1,14 @@
-const User = require("../models/User");
-const asyncErrorWrapper = require("express-async-handler");
-const { sendJwtToClient } = require("../helpers/authorization/tokenHelpers");
-const CustomError = require("../helpers/error/CustomError");
-const {
+import User from "../models/User.js";
+import asyncErrorWrapper from "express-async-handler";
+import { sendJwtToClient } from "../helpers/authorization/tokenHelpers.js";
+import CustomError from "../helpers/error/CustomError.js";
+import {
   validateUserInput,
   comparePassword,
-} = require("../helpers/input/inputHelpers");
-const sendEmail = require("../helpers/libs/sendEmail");
+} from "../helpers/input/inputHelpers.js";
+import sendEmail from "../helpers/libs/sendEmail.js";
 
-const register = asyncErrorWrapper(async (req, res, next) => {
+export const register = asyncErrorWrapper(async (req, res, next) => {
   const { username, email, password, isAdmin } = req.body;
 
   const user = await User.create({
@@ -21,7 +21,7 @@ const register = asyncErrorWrapper(async (req, res, next) => {
   sendJwtToClient(user, res, 200);
 });
 
-const login = asyncErrorWrapper(async (req, res, next) => {
+export const login = asyncErrorWrapper(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!validateUserInput(email, password)) {
@@ -41,7 +41,7 @@ const login = asyncErrorWrapper(async (req, res, next) => {
   sendJwtToClient(user, res);
 });
 
-const logout = asyncErrorWrapper(async (req, res, next) => {
+export const logout = asyncErrorWrapper(async (req, res, next) => {
   const { NODE_ENV } = process.env;
 
   return res
@@ -57,7 +57,7 @@ const logout = asyncErrorWrapper(async (req, res, next) => {
     });
 });
 
-const editDetails = asyncErrorWrapper(async (req, res, next) => {
+export const editDetails = asyncErrorWrapper(async (req, res, next) => {
   const editInformation = req.body;
 
   const { password, ...others } = editInformation;
@@ -83,7 +83,7 @@ const editDetails = asyncErrorWrapper(async (req, res, next) => {
   });
 });
 
-const forgotPassword = asyncErrorWrapper(async (req, res, next) => {
+export const forgotPassword = asyncErrorWrapper(async (req, res, next) => {
   const resetEmail = req.body.email;
 
   const user = await User.findOne({ email: resetEmail });
@@ -125,7 +125,7 @@ const forgotPassword = asyncErrorWrapper(async (req, res, next) => {
   }
 });
 
-const resetPassword = asyncErrorWrapper(async (req, res, next) => {
+export const resetPassword = asyncErrorWrapper(async (req, res, next) => {
   const { resetPasswordToken } = req.query;
   const { password } = req.body;
 
@@ -152,12 +152,3 @@ const resetPassword = asyncErrorWrapper(async (req, res, next) => {
     message: "Reset password process successfull",
   });
 });
-
-module.exports = {
-  register,
-  login,
-  logout,
-  editDetails,
-  resetPassword,
-  forgotPassword,
-};

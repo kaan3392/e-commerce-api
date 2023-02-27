@@ -1,8 +1,8 @@
-const User = require("../models/User");
-const asyncErrorWrapper = require("express-async-handler");
-const CustomError = require("../helpers/error/CustomError");
+import User from "../models/User.js";
+import asyncErrorWrapper from "express-async-handler";
+import CustomError from "../helpers/error/CustomError.js";
 
-const getAllUsers = asyncErrorWrapper(async (req, res) => {
+export const getAllUsers = asyncErrorWrapper(async (req, res) => {
   const query = req.query.new;
 
   const users = query
@@ -12,7 +12,7 @@ const getAllUsers = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json({ success: true, data: users });
 });
 
-const getSingleUser = asyncErrorWrapper(async (req, res, next) => {
+export const getSingleUser = asyncErrorWrapper(async (req, res, next) => {
   const { id } = req.params;
 
   const user = await User.findById(id);
@@ -27,7 +27,7 @@ const getSingleUser = asyncErrorWrapper(async (req, res, next) => {
   });
 });
 
-const userStats = asyncErrorWrapper(async (req, res, next) => {
+export const userStats = asyncErrorWrapper(async (req, res, next) => {
   
   const date = new Date();
   const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
@@ -49,7 +49,7 @@ const userStats = asyncErrorWrapper(async (req, res, next) => {
   return res.status(200).json({ success: true, data: data });
 });
 
-const deleteUser = asyncErrorWrapper(async (req, res, next) => {
+export const deleteUser = asyncErrorWrapper(async (req, res, next) => {
   const id = req.params.id;
 
   const user = await User.findById(id);
@@ -66,4 +66,3 @@ const deleteUser = asyncErrorWrapper(async (req, res, next) => {
   });
 });
 
-module.exports = { getSingleUser, getAllUsers, deleteUser, userStats };

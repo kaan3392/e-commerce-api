@@ -1,10 +1,10 @@
-const express = require("express");
-const authRoute = require("./auth");
-const userRoute = require("./user");
-const productRoute = require("./product");
-const orderRoute = require("./order");
-const commentRoute = require("./comment");
-const stripeRoute = require("./stripe");
+import express from "express";
+import authRoute from "./auth.js";
+import userRoute from "./user.js";
+import productRoute from "./product.js";
+import orderRoute from "./order.js";
+import commentRoute from "./comment.js";
+import stripeRoute from "./stripe.js";
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.use("/orders", orderRoute);
 router.use("/comments", commentRoute);
 router.use("/checkout", stripeRoute);
 
-module.exports = router;
+export default router;
