@@ -8,7 +8,7 @@ export const createOrder = asyncErrorWrapper(async (req, res, next) => {
   const newOrder = new Order(req.body);
 
   const savedOrder = await newOrder.save();
-  return res.status(200).json({success:true, data:savedOrder});
+  return res.status(200).json(savedOrder);
 });
 
 export const updateOrder = asyncErrorWrapper(async (req, res) => {
@@ -19,7 +19,7 @@ export const updateOrder = asyncErrorWrapper(async (req, res) => {
     },
     { new: true }
   );
-  return res.status(200).json({success:true, data:updatedOrder});
+  return res.status(200).json(updatedOrder);
 });
 
 export const deleteOrder = asyncErrorWrapper(async (req, res) => {
@@ -32,7 +32,7 @@ export const getUserOrder = asyncErrorWrapper(async (req, res) => {
     .sort({ createdAt: -1 })
     .populate("userId")
     .populate("orderItems.product");
-  return res.status(200).json({success:true, data:order});
+  return res.status(200).json(order);
 });
 
 export const getOneOrAllOrders = asyncErrorWrapper(async (req, res) => {
@@ -49,7 +49,7 @@ export const getOneOrAllOrders = asyncErrorWrapper(async (req, res) => {
       .populate("userId")
       .populate("orderItems.product");
   }
-  return res.status(200).json({success:true, data:orders});
+  return res.status(200).json(orders);
 });
 
 export const getIncome = asyncErrorWrapper(async (req, res) => {
@@ -97,7 +97,7 @@ export const getIncome = asyncErrorWrapper(async (req, res) => {
       },
     ]);
   }
-  return res.status(200).json({success:true, data:income});
+  return res.status(200).json(income);
 });
 
 export const getIncomeOfOneProduct = asyncErrorWrapper(async (req, res) => {
@@ -128,6 +128,6 @@ export const getIncomeOfOneProduct = asyncErrorWrapper(async (req, res) => {
       },
     },
   ]);
-  return res.status(200).json({success:true, data:income});
+  return res.status(200).json(income);
 });
 

@@ -12,11 +12,15 @@ const customErrorHandler = (err, req, res, next) => {
   }
 
   if(err.code ===11000){
-    customError = new CustomError("Duplicate Key Found : Check Your Input", 400)
+    customError = new CustomError("Already registered with this email", 400)
   }
 
   if(err.name === "CastError"){
     customError = new CustomError("Please provide a valid id",400)
+  }
+
+  if(err.message ==="User validation failed: email: Please provide a valid email" ){
+    customError = new CustomError("Please provide a valid email")
   }
   
   console.log(customError.message, customError.status);

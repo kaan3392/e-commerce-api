@@ -77,10 +77,7 @@ export const editDetails = asyncErrorWrapper(async (req, res, next) => {
     });
   }
 
-  return res.status(200).json({
-    success: true,
-    data: user,
-  });
+  return res.status(200).json(user);
 });
 
 export const forgotPassword = asyncErrorWrapper(async (req, res, next) => {

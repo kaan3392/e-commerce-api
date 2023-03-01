@@ -20,7 +20,7 @@ const payment = (req, res) => {
       if (stripeErr) {
         return next(new CustomError(stripeErr, 500));
       } else {
-        return res.status(200).json({ success: true, data: stripeRes });
+        return res.status(200).json(stripeRes);
       }
     }
   );

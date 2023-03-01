@@ -9,7 +9,7 @@ export const getAllUsers = asyncErrorWrapper(async (req, res) => {
     ? await User.find().sort({ _id: -1 }).limit(5)
     : await User.find();
     
-  return res.status(200).json({ success: true, data: users });
+  return res.status(200).json(users);
 });
 
 export const getSingleUser = asyncErrorWrapper(async (req, res, next) => {
@@ -21,10 +21,7 @@ export const getSingleUser = asyncErrorWrapper(async (req, res, next) => {
     return next(new CustomError("There is no user with that id", 404));
   }
 
-  return res.status(200).json({
-    success: true,
-    data: user,
-  });
+  return res.status(200).json( user);
 });
 
 export const userStats = asyncErrorWrapper(async (req, res, next) => {
@@ -46,7 +43,7 @@ export const userStats = asyncErrorWrapper(async (req, res, next) => {
     },
   ]);
   
-  return res.status(200).json({ success: true, data: data });
+  return res.status(200).json( data);
 });
 
 export const deleteUser = asyncErrorWrapper(async (req, res, next) => {

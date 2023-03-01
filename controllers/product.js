@@ -5,7 +5,7 @@ import CustomError from "../helpers/error/CustomError.js";
 export const createProduct = asyncErrorWrapper(async (req, res, next) => {
   const newProduct = new Product(req.body);
   const savedPro = await newProduct.save();
-  return res.status(200).json({ success: true, data: savedPro });
+  return res.status(200).json(savedPro);
 });
 
 export const updateProduct = asyncErrorWrapper(async (req, res, next) => {
@@ -16,7 +16,7 @@ export const updateProduct = asyncErrorWrapper(async (req, res, next) => {
     },
     { new: true, runValidators:true }
   );
-  return res.status(200).json({ success: true, data: updateProduct });
+  return res.status(200).json(updateProduct);
 });
 
 export const deleteProduct = asyncErrorWrapper(async (req, res, next) => {
@@ -43,7 +43,7 @@ export const getProduct = asyncErrorWrapper(async (req, res) => {
         
     }
 });
-  return res.status(200).json({ success: true, data: product });
+  return res.status(200).json(product);
 });
 
 export const getAllProducts = asyncErrorWrapper(async (req, res) => {
@@ -66,6 +66,6 @@ export const getAllProducts = asyncErrorWrapper(async (req, res) => {
   } else {
     products = await Product.find().populate("comments");
   }
-  return res.status(200).json({ success: true, data: products });
+  return res.status(200).json(products);
 });
 
