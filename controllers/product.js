@@ -47,7 +47,7 @@ export const getProduct = asyncErrorWrapper(async (req, res) => {
 });
 
 export const getAllProducts = asyncErrorWrapper(async (req, res) => {
-  const { newPro, category, filter } = req.query;
+  const { newPro, category, filter, price } = req.query;
 
   let products;
   if (newPro) {
@@ -55,6 +55,10 @@ export const getAllProducts = asyncErrorWrapper(async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(6)
       .populate("comments");
+  }else if (price) {
+    products = await Product.find()
+      .sort({ price: -1 })
+      .limit(6)
   } else if (category) {
     products = await Product.find({
       categories: {
