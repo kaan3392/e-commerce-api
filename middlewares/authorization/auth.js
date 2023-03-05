@@ -10,10 +10,11 @@ import Comment from "../../models/Comment.js";
 
 export const getAccessToRoute = (req, res, next) => {
   if (!isTokenIncluded(req)) {
-    return next(new CustomError("You re not authorization to this route", 401));
+    return next(new CustomError("You're not authorization to this route", 401));
   }
 
   const accessToken = getAccessTokenFromHeader(req);
+
 
   jwt.verify(accessToken, process.env.JWT_SECRET_KEY, (err, decoded) => {
     if (err) {
