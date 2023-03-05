@@ -17,6 +17,7 @@ export const sendJwtToClient = (user, response, status) => {
         username: user.username,
         email: user.email,
         isAdmin: user.isAdmin,
+        id:user._id
       },
     });
 };
