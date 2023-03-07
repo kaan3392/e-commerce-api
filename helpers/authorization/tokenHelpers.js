@@ -23,8 +23,6 @@ export const sendJwtToClient = (user, response, status) => {
 };
 
 export const isTokenIncluded = (req) => {
-  
-
   return (
     req.headers.authorization && req.headers.authorization.startsWith("Bearer")
   );

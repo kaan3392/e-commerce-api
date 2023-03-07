@@ -10,7 +10,7 @@ import Comment from "../../models/Comment.js";
 
 export const getAccessToRoute = (req, res, next) => {
   if (!isTokenIncluded(req)) {
-    return next(new CustomError("You're not authorization to this route", 401));
+    return next(new CustomError("You have no token!", 401));
   }
 
   const accessToken = getAccessTokenFromHeader(req);
@@ -20,7 +20,7 @@ export const getAccessToRoute = (req, res, next) => {
     if (err) { 
       console.log(err)
       return next(
-        new CustomError("You are not authorization to access this route", 401)
+        new CustomError("You are not authorization to access this route!", 401)
       );
     }
     req.user = {
@@ -37,7 +37,7 @@ export const getAdminAccess = asyncErrorWrapper(async (req, res, next) => {
   const user = await User.findById(id);
 
   if (!user.isAdmin) {
-    return next(new CustomError("Only admins can access this route", 403));
+    return next(new CustomError("Only admins can access this route!", 403));
   }
   next();
 });
