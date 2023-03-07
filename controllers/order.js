@@ -2,7 +2,7 @@ import Order from "../models/Order.js";
 import asyncErrorWrapper from "express-async-handler";
 import mongoose from "mongoose";
 
-const {ObjectId} = mongoose.Types;
+const { ObjectId } = mongoose.Types;
 
 export const createOrder = asyncErrorWrapper(async (req, res, next) => {
   const newOrder = new Order(req.body);
@@ -24,7 +24,9 @@ export const updateOrder = asyncErrorWrapper(async (req, res) => {
 
 export const deleteOrder = asyncErrorWrapper(async (req, res) => {
   await Order.findByIdAndDelete(req.params.id);
-  return res.status(200).json({success:true, message:"Order has been deleted!"});
+  return res
+    .status(200)
+    .json({ success: true, message: "Order has been deleted!" });
 });
 
 export const getUserOrder = asyncErrorWrapper(async (req, res) => {
@@ -35,21 +37,22 @@ export const getUserOrder = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json(order);
 });
 
-export const getOneOrAllOrders = asyncErrorWrapper(async (req, res) => {
-  const { id } = req.query;
-
-  let orders;
-  if (id) {
-    orders = await Order.findById(id)
-      .populate("userId")
-      .populate("orderItems.product");
-  } else {
-    orders = await Order.find()
-      .sort({ createdAt: -1 })
-      .populate("userId")
-      .populate("orderItems.product");
-  }
+export const getOrders = asyncErrorWrapper(async (req, res) => {
+  const orders = await Order.find()
+    .sort({ createdAt: -1 })
+    .populate("userId")
+    .populate("orderItems.product");
   return res.status(200).json(orders);
+});
+
+export const getSingleOrder = asyncErrorWrapper(async (req, res, next) => {
+  const { id } = req.params;
+
+  const order = await Order.findById(id)
+    .populate("userId")
+    .populate("orderItems.product");
+
+  return res.status(200).json(order);
 });
 
 export const getIncome = asyncErrorWrapper(async (req, res) => {
@@ -130,4 +133,3 @@ export const getIncomeOfOneProduct = asyncErrorWrapper(async (req, res) => {
   ]);
   return res.status(200).json(income);
 });
-

@@ -4,9 +4,10 @@ import {
 } from "../../helpers/authorization/tokenHelpers.js";
 import asyncErrorWrapper from "express-async-handler";
 import CustomError from "../../helpers/error/CustomError.js";
-import jwt from "jsonwebtoken";
+import jwt, { decode } from "jsonwebtoken";
 import User from "../../models/User.js";
 import Comment from "../../models/Comment.js";
+import Order from "../../models/Order.js";
 
 export const getAccessToRoute = (req, res, next) => {
   if (!isTokenIncluded(req)) {
@@ -23,9 +24,10 @@ export const getAccessToRoute = (req, res, next) => {
         new CustomError("You are not authorization to access this route!", 401)
       );
     }
+    console.log("decoded",decoded)
     req.user = {
       id: decoded.id,
-      name: decoded.name,
+      isAdmin: decoded.isAdmin,
     };
     next();
   });
@@ -49,6 +51,19 @@ export const getOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
   const user = await User.findById(paramsId);
 
   if (user._id.toString() !== userId) {
+    return next(new CustomError("Only owner can access this route", 403));
+  }
+
+  next();
+});
+
+export const getOwnerAccessOrAdmin = asyncErrorWrapper(async (req, res, next) => {
+  const userId = req.user.id;
+  const {id} = req.params;
+
+  const order = await Order.findById(id);
+
+  if (order.userId.toString() !== userId || req.user.isAdmin) {
     return next(new CustomError("Only owner can access this route", 403));
   }
 
