@@ -93,7 +93,11 @@ export const forgotPassword = asyncErrorWrapper(async (req, res, next) => {
 
   await user.save();
 
-  const resetPasswordUrl = `${process.env.API_URL}/api/auth/resetpassword?resetPasswordToken=${resetPasswordToken}`;
+  const URL = process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://e-commerce-frontend-three.vercel.app";
+
+  const resetPasswordUrl = `${URL}/resetpassword?resetPasswordToken=${resetPasswordToken}`;
 
   const emailTemplate = `
   <h3>Reset Your Password</h3>
@@ -110,7 +114,7 @@ export const forgotPassword = asyncErrorWrapper(async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: "Token sent to your email address",
+      message: "The token has been sent to the mailbox. It will be invalid after 1 hour!",
     });
   } catch (err) {
     user.resetPasswordToken = undefined;
