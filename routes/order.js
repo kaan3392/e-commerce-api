@@ -3,7 +3,7 @@ import {
   getAccessToRoute,
   getAdminAccess,
   getOwnerAccess,
-  getOwnerAccessOrAdmin,
+  getOwnerOrAdminAccess,
 } from "../middlewares/authorization/auth.js";
 import {
   createOrder,
@@ -18,15 +18,15 @@ import {
 
 const router = express.Router();
 
-router.get("/", getAccessToRoute, getOwnerAccessOrAdmin, getOrders);
-
-router.get("/:id", getAccessToRoute, getOwnerAccessOrAdmin, getSingleOrder);
-
-router.post("/", getAccessToRoute, createOrder);
+router.get("/", getAccessToRoute, getAdminAccess, getOrders);
 
 router.get("/income", getAccessToRoute, getAdminAccess, getIncome);
 
 router.get("/find/:id", [getAccessToRoute, getOwnerAccess], getUserOrder);
+
+router.get("/:id", getAccessToRoute, getOwnerOrAdminAccess, getSingleOrder);
+
+router.post("/", getAccessToRoute, createOrder);
 
 router.put("/:id", getAccessToRoute, getAdminAccess, updateOrder);
 

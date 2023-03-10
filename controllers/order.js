@@ -2,7 +2,18 @@ import Order from "../models/Order.js";
 import asyncErrorWrapper from "express-async-handler";
 import mongoose from "mongoose";
 
+
 const { ObjectId } = mongoose.Types;
+
+export const getOrders = asyncErrorWrapper(async (req, res) => {
+  const orders = await Order.find()
+    .sort({ createdAt: -1 })
+    // .populate("userId")
+    // .populate("orderItems.product");
+    console.log(orders)
+  return res.status(200).json(orders);
+});
+
 
 export const createOrder = asyncErrorWrapper(async (req, res, next) => {
   const newOrder = new Order(req.body);
@@ -37,13 +48,7 @@ export const getUserOrder = asyncErrorWrapper(async (req, res) => {
   return res.status(200).json(order);
 });
 
-export const getOrders = asyncErrorWrapper(async (req, res) => {
-  const orders = await Order.find()
-    .sort({ createdAt: -1 })
-    .populate("userId")
-    .populate("orderItems.product");
-  return res.status(200).json(orders);
-});
+
 
 export const getSingleOrder = asyncErrorWrapper(async (req, res, next) => {
   const { id } = req.params;
@@ -61,7 +66,6 @@ export const getIncome = asyncErrorWrapper(async (req, res) => {
   const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
   const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
   const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
-
   let income;
   if (compare) {
     income = await Order.aggregate([
